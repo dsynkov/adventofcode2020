@@ -1,19 +1,16 @@
 package com.adventofcode.shared;
 
-import com.adventofcode.AOC2019.PuzzleSolutions;
-import org.apache.commons.io.IOUtils;
-
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class PuzzleHelpers {
 
-    public static String[] readLinesFromResourceFile(String path) {
-        InputStream stream = PuzzleSolutions.class.getResourceAsStream(path);
+    public static String[] readLinesFromInputFile(String path) {
         String[] lines = {};
-        try {
-            lines = IOUtils.toString(stream, StandardCharsets.UTF_8).split("\\r?\\n");
+        try (BufferedReader br = Files.newBufferedReader(Paths.get(path))) {
+            lines = br.lines().toArray(String[]::new);
         } catch (IOException e) {
             e.printStackTrace();
         }

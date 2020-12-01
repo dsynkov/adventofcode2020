@@ -1,15 +1,15 @@
 package com.adventofcode.AOC2019
 
 import com.adventofcode.AOC2019.PuzzleConstants._
-import com.adventofcode.shared.PuzzleHelpers
+import com.adventofcode.shared.PuzzleHelpersScala
 
 import scala.collection.mutable
 
 object PuzzleSolutionsScala {
 
   def main(args: Array[String]): Unit = {
-    val p1lines = PuzzleHelpers.readLinesFromResourceFile(PUZZLE_1_INPUT)
-    val p2lines = PuzzleHelpers.readLinesFromResourceFile(PUZZLE_2_INPUT)
+    val p1lines = PuzzleHelpersScala.readLinesFromInputFile(PUZZLE_1_INPUT)
+    val p2lines = PuzzleHelpersScala.readLinesFromInputFile(PUZZLE_2_INPUT)
 
     println(f"Day #1 part #1: ${day1part1(p1lines)}")
     println(f"Day #1 part #2: ${day1part2(p1lines)}")
