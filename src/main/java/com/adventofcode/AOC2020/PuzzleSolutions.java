@@ -4,6 +4,7 @@ import com.adventofcode.shared.PuzzleHelpers;
 import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +26,7 @@ public class PuzzleSolutions {
         System.out.printf("Day #2 part #2: %d\n", day2result[1]);
 
         String[] p3lines = PuzzleHelpers.readLinesFromInputFile(PUZZLE_3_INPUT);
-        System.out.printf("Day #3 part #1: %d\n", day3part1(p3lines));
+        System.out.printf("Day #3 part #1: %d\n", day3part1(p3lines, 3, 1));
         System.out.printf("Day #3 part #2: %d\n", day3part2(p3lines));
     }
 
@@ -99,11 +100,43 @@ public class PuzzleSolutions {
         return new int[] {part1Counter, part2Counter};
     }
 
-    private static int day3part1(String[] input) {
-        return -1;
+    private static Long day3part1(String[] input, int right, int down) {
+
+        Long treeCounter = 0L;
+
+        String dupPath;
+
+        for (int i=down, k=1; i < input.length; i += down, k++) {
+
+            String path = input[i];
+
+            // Since path is indefinite, duplicate
+            dupPath = StringUtils.repeat(path, i +1);
+
+            int moveRightBy = right == 1 ? k : right * i;
+            char charAtPos = dupPath.charAt(moveRightBy);
+            boolean isTree = charAtPos=='#';
+
+            StringBuilder sb = new StringBuilder(dupPath);
+
+            if (isTree) {
+                treeCounter++;
+                sb.setCharAt(moveRightBy, 'X');
+                dupPath = sb.toString();
+            }
+
+//            System.out.printf("Index: %-10d Right By: %-10d Tree: %-10s %s\n", i, moveRightBy, isTree, dupPath);
+        }
+
+        return treeCounter;
     }
 
-    private static int day3part2(String[] input) {
-        return -1;
+    private static long day3part2(String[] input) {
+        int[][] slopes = {{1, 1}, {3, 1}, {5, 1}, {7, 1}, {1, 2}};
+        List<Long> treeCounts = new ArrayList<>();
+        for (int[] slope : slopes) {
+            treeCounts.add(day3part1(input, slope[0], slope[1]));
+        }
+        return treeCounts.stream().reduce(1L, (x, y) -> (x * y));
     }
 }
