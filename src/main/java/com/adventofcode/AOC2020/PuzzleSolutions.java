@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import static com.adventofcode.AOC2020.PuzzleConstants.PUZZLE_1_INPUT;
 import static com.adventofcode.AOC2020.PuzzleConstants.PUZZLE_2_INPUT;
+import static com.adventofcode.AOC2020.PuzzleConstants.PUZZLE_3_INPUT;
 
 public class PuzzleSolutions {
 
@@ -22,6 +23,10 @@ public class PuzzleSolutions {
         int[] day2result = day2(p2lines);
         System.out.printf("Day #2 part #1: %d\n", day2result[0]);
         System.out.printf("Day #2 part #2: %d\n", day2result[1]);
+
+        String[] p3lines = PuzzleHelpers.readLinesFromInputFile(PUZZLE_3_INPUT);
+        System.out.printf("Day #3 part #1: %d\n", day3part1(p3lines));
+        System.out.printf("Day #3 part #2: %d\n", day3part2(p3lines));
     }
 
     private static int day1part1(String[] input) {
@@ -92,5 +97,13 @@ public class PuzzleSolutions {
             }
         }
         return new int[] {part1Counter, part2Counter};
+    }
+
+    private static int day3part1(String[] input) {
+        return -1;
+    }
+
+    private static int day3part2(String[] input) {
+        return -1;
     }
 }
