@@ -9,9 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.adventofcode.AOC2020.PuzzleConstants.PUZZLE_1_INPUT;
-import static com.adventofcode.AOC2020.PuzzleConstants.PUZZLE_2_INPUT;
-import static com.adventofcode.AOC2020.PuzzleConstants.PUZZLE_3_INPUT;
+import static com.adventofcode.AOC2020.PuzzleConstants.*;
 
 public class PuzzleSolutions {
 
@@ -28,6 +26,10 @@ public class PuzzleSolutions {
         String[] p3lines = PuzzleHelpers.readLinesFromInputFile(PUZZLE_3_INPUT);
         System.out.printf("Day #3 part #1: %d\n", day3part1(p3lines, 3, 1));
         System.out.printf("Day #3 part #2: %d\n", day3part2(p3lines));
+
+        String[] p4lines = PuzzleHelpers.readLinesFromInputFile(PUZZLE_4_INPUT);
+        System.out.printf("Day #4 part #1: %d\n", day4part1(p4lines));
+        System.out.printf("Day #4 part #2: %d\n", day4part2(p4lines));
     }
 
     private static int day1part1(String[] input) {
@@ -138,5 +140,13 @@ public class PuzzleSolutions {
             treeCounts.add(day3part1(input, slope[0], slope[1]));
         }
         return treeCounts.stream().reduce(1L, (x, y) -> (x * y));
+    }
+
+    private static int day4part1(String[] input) {
+        return -1;
+    }
+
+    private static int day4part2(String[] input) {
+        return -1;
     }
 }
