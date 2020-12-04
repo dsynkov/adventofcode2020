@@ -10,6 +10,7 @@ object PuzzleSolutionsScala {
     val p2lines = PuzzleHelpersScala.readLinesFromInputFile(PUZZLE_2_INPUT)
     val p3lines = PuzzleHelpersScala.readLinesFromInputFile(PUZZLE_3_INPUT)
     val p4lines = PuzzleHelpersScala.readLinesFromInputFile(PUZZLE_4_INPUT)
+    val p5lines = PuzzleHelpersScala.readLinesFromInputFile(PUZZLE_5_INPUT)
 
     println(f"Day #1 part #1: ${day1(p1lines, 2)}")
     println(f"Day #1 part #2: ${day1(p1lines, 3)}")
@@ -22,6 +23,9 @@ object PuzzleSolutionsScala {
 
     println(f"Day #4 part #1: ${day4part1(p4lines)}")
     println(f"Day #4 part #2: ${day4part2(p4lines)}")
+    
+    println(f"Day #5 part #1: ${day5part1(p5lines)}")
+    println(f"Day #5 part #2: ${day5part2(p5lines)}")
   }
 
   def day1(input: Array[String], combinations: Int): Int = {
@@ -80,4 +84,8 @@ object PuzzleSolutionsScala {
   def day4part1(input: Array[String]): Int = -1
 
   def day4part2(input: Array[String]): Int = -1
+
+  def day5part1(input: Array[String]): Int = -1
+
+  def day5part2(input: Array[String]): Int = -1
 }

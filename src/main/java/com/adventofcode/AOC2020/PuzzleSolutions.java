@@ -1,5 +1,6 @@
 package com.adventofcode.AOC2020;
 
+import com.adventofcode.AOC2020.extras.Day4PassportValidator;
 import com.adventofcode.shared.PuzzleHelpers;
 import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.StringUtils;
@@ -27,9 +28,13 @@ public class PuzzleSolutions {
         System.out.printf("Day #3 part #1: %d\n", day3part1(p3lines, 3, 1));
         System.out.printf("Day #3 part #2: %d\n", day3part2(p3lines));
 
-        String[] p4lines = PuzzleHelpers.readLinesFromInputFile(PUZZLE_4_INPUT);
+        List<String> p4lines = PuzzleHelpers.readDay4LinesFromInputFile(PUZZLE_4_INPUT);
         System.out.printf("Day #4 part #1: %d\n", day4part1(p4lines));
         System.out.printf("Day #4 part #2: %d\n", day4part2(p4lines));
+
+        String[] p5lines = PuzzleHelpers.readLinesFromInputFile(PUZZLE_5_INPUT);
+        System.out.printf("Day #5 part #1: %d\n", day5part1(p5lines));
+        System.out.printf("Day #5 part #2: %d\n", day5part2(p5lines));
     }
 
     private static int day1part1(String[] input) {
@@ -142,11 +147,97 @@ public class PuzzleSolutions {
         return treeCounts.stream().reduce(1L, (x, y) -> (x * y));
     }
 
-    private static int day4part1(String[] input) {
+    /**
+     * Field "cid":" is excluded since
+     * we can treat it as optional.
+     */
+    private static int day4part1(List<String> input) {
+        String[] expectedFields = {"byr:", "iyr:", "eyr:", "hgt:", "hcl:", "ecl:", "pid:"};
+        int valid = input.size();
+        for (String line: input) {
+            for (String field: expectedFields) {
+                if (!line.contains(field)) {
+                    valid--;
+                    break;
+                }
+            }
+        }
+        return valid;
+    }
+
+    private static int day4part2(List<String> input) {
+
+        String[] expectedFields = {"byr:", "iyr:", "eyr:", "hgt:", "hcl:", "ecl:", "pid:"};
+
+        int valid = 0;
+
+        for (String line: input) {
+
+            String[] fields = line.split(" ");
+
+            boolean isValid = true;
+
+            // Skip if missing fields
+            if (fields.length < 7) continue;
+            for (String field: expectedFields) {
+                if (!line.contains(field)) {
+                    isValid = false;
+                    break;
+                }
+            }
+
+            if (!isValid) continue;;
+
+            List<Boolean> validations = new ArrayList<>();
+
+            for (String field: fields) {
+
+                String[] fieldParts = field.split(":");
+                String prefix = fieldParts[0];
+                String value = fieldParts[1];
+
+                switch(prefix) {
+                    case "byr":
+                        isValid = Day4PassportValidator.byrIsValid(Integer.parseInt(value));
+                        break;
+                    case "iyr":
+                        isValid = Day4PassportValidator.iyrIsValid(Integer.parseInt(value));
+                        break;
+                    case "eyr":
+                        isValid = Day4PassportValidator.eyrIsValid(Integer.parseInt(value));
+                        break;
+                    case "hgt":
+                        isValid = Day4PassportValidator.hgtIsValid(value);
+                        break;
+                    case "hcl":
+                        isValid = Day4PassportValidator.hclIsValid(value);
+                        break;
+                    case "ecl":
+                        isValid = Day4PassportValidator.eclIsValid(value);
+                        break;
+                    case "pid":
+                        isValid = Day4PassportValidator.pidIsValid(value);
+                        break;
+                    case "cid":
+                        break;
+                    default:
+                        validations.add(false);
+                        break;
+                }
+                validations.add(isValid);
+            }
+            if (!validations.contains(false)) {
+                valid++;
+            }
+        }
+        return valid;
+    }
+
+    private static int day5part1(String[] input) {
         return -1;
     }
 
-    private static int day4part2(String[] input) {
+    private static int day5part2(String[] input) {
         return -1;
     }
 }
