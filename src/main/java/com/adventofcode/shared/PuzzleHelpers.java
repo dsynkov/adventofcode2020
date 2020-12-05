@@ -1,6 +1,8 @@
 package com.adventofcode.shared;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -29,9 +31,11 @@ public class PuzzleHelpers {
         try (BufferedReader br = Files.newBufferedReader(Paths.get(path))) {
             FileInputStream fileInputStream = new FileInputStream(new File(path));
             String fileAsString = IOUtils.toString(fileInputStream, StandardCharsets.UTF_8);
-            String[] lines = fileAsString.split("\r\n\r\n");
+            String lineSep = SystemUtils.IS_OS_WINDOWS ? "\r\n" : "\n";
+            String blankLineSep = StringUtils.repeat(lineSep, 2);
+            String[] lines = fileAsString.split(blankLineSep);
             for (String line: lines) {
-                String passport = String.join(" ", line.split("\r\n"));
+                String passport = String.join(" ", line.split(lineSep));
                 passports.add(passport);
             }
         } catch (IOException e) {
