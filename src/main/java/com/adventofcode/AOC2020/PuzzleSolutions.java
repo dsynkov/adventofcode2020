@@ -7,8 +7,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.adventofcode.AOC2020.PuzzleConstants.*;
 
@@ -33,8 +35,9 @@ public class PuzzleSolutions {
         System.out.printf("Day #4 part #2: %d\n", day4part2(p4lines));
 
         String[] p5lines = PuzzleHelpers.readLinesFromInputFile(PUZZLE_5_INPUT);
-        System.out.printf("Day #5 part #1: %d\n", day5part1(p5lines));
-        System.out.printf("Day #5 part #2: %d\n", day5part2(p5lines));
+        List<Integer> seatIds = day5part1(p5lines);
+        System.out.printf("Day #5 part #1: %d\n", Collections.max(seatIds));
+        System.out.printf("Day #5 part #2: %d\n", day5part2(seatIds));
     }
 
     private static int day1part1(String[] input) {
@@ -233,11 +236,36 @@ public class PuzzleSolutions {
         return valid;
     }
 
-    private static int day5part1(String[] input) {
-        return -1;
+    private static List<Integer> day5part1(String[] input) {
+        List<Integer> seatIds = new ArrayList<>();
+        for (String boardingPass: input) {
+            int row = searchSeat(boardingPass.substring(0, 7), 'B', 0, 127);
+            int col = searchSeat(boardingPass.substring(7, 10), 'R', 0, 7);
+            seatIds.add(row * 8 + col);
+        }
+        return seatIds;
     }
 
-    private static int day5part2(String[] input) {
-        return -1;
+    private static int day5part2(List<Integer> seatIds) {
+        int minSeat = Collections.min(seatIds);
+        int maxSeat = Collections.max(seatIds);
+        return IntStream
+                .range(minSeat, maxSeat)
+                .filter(i -> !seatIds.contains(i))
+                .toArray()[0];
+    }
+
+    private static int searchSeat(String boardingPass, char upperChar, double x, double y) {
+        double mid = x / 2 + y / 2;
+        for (char c: boardingPass.toCharArray()) {
+            if (c == upperChar) {
+                x = Math.ceil(mid);
+                mid = x / 2 + Math.floor(y) / 2;
+            } else {
+                y = mid;
+                mid = x / 2 + y / 2;
+            }
+        }
+        return (int) Math.round(mid);
     }
 }

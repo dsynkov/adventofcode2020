@@ -23,9 +23,10 @@ object PuzzleSolutionsScala {
 
     println(f"Day #4 part #1: ${day4part1(p4lines)}")
     println(f"Day #4 part #2: ${day4part2(p4lines)}")
-    
-    println(f"Day #5 part #1: ${day5part1(p5lines)}")
-    println(f"Day #5 part #2: ${day5part2(p5lines)}")
+
+    val seatIds = day5part1(p5lines)
+    println(f"Day #5 part #1: ${seatIds.max}")
+    println(f"Day #5 part #2: ${day5part2(seatIds)}")
   }
 
   def day1(input: Array[String], combinations: Int): Int = {
@@ -75,17 +76,26 @@ object PuzzleSolutionsScala {
     treeCounter
   }
 
-  def day3part2(input: Array[String]): Long = {
+  def day3part2(input: Array[String]): Long =
     Array((1, 1), (3, 1), (5, 1), (7, 1), (1, 2))
       .map(tup => day3part1(input, tup._1, tup._2))
       .product
-  }
 
   def day4part1(input: Array[String]): Int = -1
 
   def day4part2(input: Array[String]): Int = -1
 
-  def day5part1(input: Array[String]): Int = -1
+  def day5part1(input: Array[String]): Array[Int] = {
+    val subMap = Map('F' -> '0', 'L' -> '0', 'B' -> '1', 'R' -> '1')
+    input
+      .map(s => s.splitAt(7))
+      .map{case(x, y) =>
+        val row = Integer.parseInt(x.map(c => subMap.getOrElse(c, c)), 2)
+        val col = Integer.parseInt(y.map(c => subMap.getOrElse(c, c)), 2)
+        row * 8 + col
+      }
+    }
 
-  def day5part2(input: Array[String]): Int = -1
+  def day5part2(input: Array[Int]): Int =
+    (input.min to input.max).sum - input.sum
 }
