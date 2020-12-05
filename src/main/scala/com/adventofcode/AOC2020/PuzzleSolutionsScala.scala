@@ -9,7 +9,7 @@ object PuzzleSolutionsScala {
     val p1lines = PuzzleHelpersScala.readLinesFromInputFile(PUZZLE_1_INPUT)
     val p2lines = PuzzleHelpersScala.readLinesFromInputFile(PUZZLE_2_INPUT)
     val p3lines = PuzzleHelpersScala.readLinesFromInputFile(PUZZLE_3_INPUT)
-    val p4lines = PuzzleHelpersScala.readLinesFromInputFile(PUZZLE_4_INPUT)
+    val p4lines = PuzzleHelpersScala.readDay4LinesFromInputFile(PUZZLE_4_INPUT)
     val p5lines = PuzzleHelpersScala.readLinesFromInputFile(PUZZLE_5_INPUT)
 
     println(f"Day #1 part #1: ${day1(p1lines, 2)}")
@@ -81,9 +81,37 @@ object PuzzleSolutionsScala {
       .map(tup => day3part1(input, tup._1, tup._2))
       .product
 
-  def day4part1(input: Array[String]): Int = -1
+  def day4part1(input: Array[String]): Int = {
+    val expectedFields = Array("byr:", "iyr:", "eyr:", "hgt:", "hcl:", "ecl:", "pid:")
+    input.count(passport => expectedFields.forall(passport.contains))
+  }
 
-  def day4part2(input: Array[String]): Int = -1
+
+  def day4part2(input: Array[String]): Int = {
+    val expectedFields = Array("byr:", "iyr:", "eyr:", "hgt:", "hcl:", "ecl:", "pid:")
+    val validationsMap = Map(
+      "cid" -> {v: String => true},
+      "byr" -> {v: String => (1920 to 2002).contains(v.toInt)},
+      "iyr" -> {v: String => (2010 to 2020).contains(v.toInt)},
+      "eyr" -> {v: String => (2020 to 2030).contains(v.toInt)},
+      "hcl" -> {v: String => v.matches("#[0-9a-fA-F]+")},
+      "ecl" -> {v: String => Array("amb", "blu", "brn", "gry", "grn", "hzl", "oth").contains(v)},
+      "pid" -> {v: String => v.forall(_.isDigit) && v.length==9},
+      "hgt" -> {v: String =>
+        v.endsWith("cm") && (150 to 193).contains(v.replace("cm","").toInt) ||
+          v.endsWith("in") && (59 to 70).contains(v.replace("in","").toInt)
+      }
+    )
+    input
+      .filter(line => expectedFields.forall(line.contains))
+      .map(line => line.split("\\s")
+        .flatMap(_.split(":"))
+        .grouped(2).map(arr => arr(0) -> arr(1)).toMap
+      ).count(field => !field.map{
+        case(k,v) => validationsMap(k)(v)
+      }.toArray.contains(false)
+    )
+  }
 
   def day5part1(input: Array[String]): Array[Int] = {
     val subMap = Map('F' -> '0', 'L' -> '0', 'B' -> '1', 'R' -> '1')
