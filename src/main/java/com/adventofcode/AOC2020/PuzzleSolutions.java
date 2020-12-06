@@ -38,6 +38,10 @@ public class PuzzleSolutions {
         List<Integer> seatIds = day5part1(p5lines);
         System.out.printf("Day #5 part #1: %d\n", Collections.max(seatIds));
         System.out.printf("Day #5 part #2: %d\n", day5part2(seatIds));
+
+        String[] p6lines = PuzzleHelpers.readLinesFromInputFile(PUZZLE_6_INPUT);
+        System.out.printf("Day #6 part #1: %d\n", day6part1(p6lines));
+        System.out.printf("Day #6 part #2: %d\n", day6part2(p6lines));
     }
 
     private static int day1part1(String[] input) {
@@ -267,5 +271,13 @@ public class PuzzleSolutions {
             }
         }
         return (int) Math.round(mid);
+    }
+
+    private static int day6part1(String[] input) {
+        return -1;
+    }
+
+    private static int day6part2(String[] input) {
+        return -1;
     }
 }

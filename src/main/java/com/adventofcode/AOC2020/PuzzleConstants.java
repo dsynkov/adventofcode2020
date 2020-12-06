@@ -6,4 +6,5 @@ public class PuzzleConstants {
     public static final String PUZZLE_3_INPUT = "src/main/resources/inputs/AOC2020/puzzle3input.txt";
     public static final String PUZZLE_4_INPUT = "src/main/resources/inputs/AOC2020/puzzle4input.txt";
     public static final String PUZZLE_5_INPUT = "src/main/resources/inputs/AOC2020/puzzle5input.txt";
+    public static final String PUZZLE_6_INPUT = "src/main/resources/inputs/AOC2020/puzzle6input.txt";
 }
