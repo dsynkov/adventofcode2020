@@ -10,7 +10,7 @@ object PuzzleHelpersScala {
     Source.fromFile(path).getLines.toArray
   }
 
-  def readDay4LinesFromInputFile(path: String): Array[String] = {
+  def readLinesWithSplitOnBlankFromInputFile(path: String): Array[String] = {
     val fileAsString = Source.fromFile(path).mkString
     val lineSep = if (SystemUtils.IS_OS_WINDOWS) "\r\n" else "\n"
     val blankLineSep = lineSep * 2

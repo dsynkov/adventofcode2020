@@ -9,9 +9,10 @@ object PuzzleSolutionsScala {
     val p1lines = PuzzleHelpersScala.readLinesFromInputFile(PUZZLE_1_INPUT)
     val p2lines = PuzzleHelpersScala.readLinesFromInputFile(PUZZLE_2_INPUT)
     val p3lines = PuzzleHelpersScala.readLinesFromInputFile(PUZZLE_3_INPUT)
-    val p4lines = PuzzleHelpersScala.readDay4LinesFromInputFile(PUZZLE_4_INPUT)
+    val p4lines = PuzzleHelpersScala.readLinesWithSplitOnBlankFromInputFile(PUZZLE_4_INPUT)
     val p5lines = PuzzleHelpersScala.readLinesFromInputFile(PUZZLE_5_INPUT)
-    val p6lines = PuzzleHelpersScala.readLinesFromInputFile(PUZZLE_6_INPUT)
+    val p6lines = PuzzleHelpersScala.readLinesWithSplitOnBlankFromInputFile(PUZZLE_6_INPUT)
+    val p7lines = PuzzleHelpersScala.readLinesWithSplitOnBlankFromInputFile(PUZZLE_7_INPUT)
 
     println(f"Day #1 part #1: ${day1(p1lines, 2)}")
     println(f"Day #1 part #2: ${day1(p1lines, 3)}")
@@ -29,8 +30,11 @@ object PuzzleSolutionsScala {
     println(f"Day #5 part #1: ${seatIds.max}")
     println(f"Day #5 part #2: ${day5part2(seatIds)}")
 
-    println(f"Day #6 part #1: ${day4part1(p6lines)}")
-    println(f"Day #6 part #2: ${day4part2(p6lines)}")
+    println(f"Day #6 part #1: ${day6part1(p6lines)}")
+    println(f"Day #6 part #2: ${day6part2(p6lines)}")
+
+    println(f"Day #7 part #1: ${day7part1(p7lines)}")
+    println(f"Day #7 part #2: ${day7part2(p7lines)}")
   }
 
   def day1(input: Array[String], combinations: Int): Int = {
@@ -131,7 +135,25 @@ object PuzzleSolutionsScala {
   def day5part2(input: Array[Int]): Int =
     (input.min to input.max).sum - input.sum
 
-  def day6part1(input: Array[String]): Int = -1
+  def day6part1(input: Array[String]): Int = {
+    input.map(_.replaceAll("\\s+", "").toSet.size).sum
+  }
 
-  def day6part2(input: Array[String]): Int = -1
+  def day6part2(input: Array[String]): Int = {
+    var counter = 0
+    for (group <- input) {
+      val passengers = group.split("\\s+")
+      if (passengers.length==1) {
+        counter += passengers.head.length
+      } else {
+        val intersection = passengers.reduce((x, y) => x.intersect(y))
+        counter += intersection.length
+      }
+    }
+    counter
+  }
+
+  def day7part1(input: Array[String]): Int = -1
+
+  def day7part2(input: Array[String]): Int = -1
 }

@@ -30,7 +30,7 @@ public class PuzzleSolutions {
         System.out.printf("Day #3 part #1: %d\n", day3part1(p3lines, 3, 1));
         System.out.printf("Day #3 part #2: %d\n", day3part2(p3lines));
 
-        List<String> p4lines = PuzzleHelpers.readDay4LinesFromInputFile(PUZZLE_4_INPUT);
+        List<String> p4lines = PuzzleHelpers.readLinesWithSplitOnBlankFromInputFile(PUZZLE_4_INPUT);
         System.out.printf("Day #4 part #1: %d\n", day4part1(p4lines));
         System.out.printf("Day #4 part #2: %d\n", day4part2(p4lines));
 
@@ -39,9 +39,13 @@ public class PuzzleSolutions {
         System.out.printf("Day #5 part #1: %d\n", Collections.max(seatIds));
         System.out.printf("Day #5 part #2: %d\n", day5part2(seatIds));
 
-        String[] p6lines = PuzzleHelpers.readLinesFromInputFile(PUZZLE_6_INPUT);
+        List<String> p6lines = PuzzleHelpers.readLinesWithSplitOnBlankFromInputFile(PUZZLE_6_INPUT);
         System.out.printf("Day #6 part #1: %d\n", day6part1(p6lines));
         System.out.printf("Day #6 part #2: %d\n", day6part2(p6lines));
+
+        String[] p7lines = PuzzleHelpers.readLinesFromInputFile(PUZZLE_7_INPUT);
+        System.out.printf("Day #7 part #1: %d\n", day7part1(p7lines));
+        System.out.printf("Day #7 part #2: %d\n", day7part2(p7lines));
     }
 
     private static int day1part1(String[] input) {
@@ -273,11 +277,22 @@ public class PuzzleSolutions {
         return (int) Math.round(mid);
     }
 
-    private static int day6part1(String[] input) {
+    private static int day6part1(List<String> input) {
+        return input.stream().map(s -> s
+                .replaceAll("\\s+", "")
+                .chars().boxed().collect(Collectors.toSet()).size())
+                .mapToInt(Integer::intValue).sum();
+    }
+
+    private static int day6part2(List<String> input) {
         return -1;
     }
 
-    private static int day6part2(String[] input) {
+    private static int day7part1(String[] input) {
+        return -1;
+    }
+
+    private static int day7part2(String[] input) {
         return -1;
     }
 }

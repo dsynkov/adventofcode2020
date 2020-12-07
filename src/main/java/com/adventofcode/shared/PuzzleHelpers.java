@@ -26,7 +26,7 @@ public class PuzzleHelpers {
         return lines;
     }
 
-    public static List<String> readDay4LinesFromInputFile(String path) {
+    public static List<String> readLinesWithSplitOnBlankFromInputFile(String path) {
         List<String> passports = new ArrayList<>();
         try (BufferedReader br = Files.newBufferedReader(Paths.get(path))) {
             FileInputStream fileInputStream = new FileInputStream(new File(path));
@@ -35,8 +35,8 @@ public class PuzzleHelpers {
             String blankLineSep = StringUtils.repeat(lineSep, 2);
             String[] lines = fileAsString.split(blankLineSep);
             for (String line: lines) {
-                String passport = String.join(" ", line.split(lineSep));
-                passports.add(passport);
+                String item = String.join(" ", line.split(lineSep));
+                passports.add(item);
             }
         } catch (IOException e) {
             e.printStackTrace();
