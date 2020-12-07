@@ -5,10 +5,7 @@ import com.adventofcode.shared.PuzzleHelpers;
 import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -284,8 +281,17 @@ public class PuzzleSolutions {
                 .mapToInt(Integer::intValue).sum();
     }
 
-    private static int day6part2(List<String> input) {
-        return -1;
+    private static long day6part2(List<String> input) {
+        return input.stream()
+                .map(group -> group.split("\\s+"))
+                .mapToLong(passengers -> {
+                    Set<Integer> charSet = passengers[0]
+                            .chars().boxed()
+                            .collect(Collectors.toSet());
+                    Arrays.stream(passengers)
+                            .forEach(p -> charSet.retainAll(p.chars().boxed().collect(Collectors.toSet())));
+                    return charSet.size();
+                }).sum();
     }
 
     private static int day7part1(String[] input) {
