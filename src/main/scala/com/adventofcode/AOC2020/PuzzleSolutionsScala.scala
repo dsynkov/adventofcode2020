@@ -3,7 +3,13 @@ package com.adventofcode.AOC2020
 import com.adventofcode.AOC2020.PuzzleConstants._
 import com.adventofcode.shared.PuzzleHelpersScala
 
+import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
+
 object PuzzleSolutionsScala {
+
+  // For Day 7
+  type BagMap = mutable.Map[String, mutable.ListBuffer[mutable.Map[String, Int]]]
 
   def main(args: Array[String]): Unit = {
     val p1lines = PuzzleHelpersScala.readLinesFromInputFile(PUZZLE_1_INPUT)
@@ -12,7 +18,7 @@ object PuzzleSolutionsScala {
     val p4lines = PuzzleHelpersScala.readLinesWithSplitOnBlankFromInputFile(PUZZLE_4_INPUT)
     val p5lines = PuzzleHelpersScala.readLinesFromInputFile(PUZZLE_5_INPUT)
     val p6lines = PuzzleHelpersScala.readLinesWithSplitOnBlankFromInputFile(PUZZLE_6_INPUT)
-    val p7lines = PuzzleHelpersScala.readLinesWithSplitOnBlankFromInputFile(PUZZLE_7_INPUT)
+    val p7lines = PuzzleHelpersScala.readLinesFromInputFile(PUZZLE_7_INPUT)
 
     println(f"Day #1 part #1: ${day1(p1lines, 2)}")
     println(f"Day #1 part #2: ${day1(p1lines, 3)}")
@@ -153,7 +159,62 @@ object PuzzleSolutionsScala {
     counter
   }
 
-  def day7part1(input: Array[String]): Int = -1
+  def day7part1(input: Array[String]): Int = {
+    val bagMap = getBagMap(input)
+    getColorCount("shiny gold", bagMap)
+  }
 
-  def day7part2(input: Array[String]): Int = -1
+  def day7part2(input: Array[String]): Int = {
+    val bagMap: BagMap = getBagMap(input)
+    getBagCount("shiny gold", bagMap) - 1
+  }
+
+  def getBagMap(input: Array[String]): BagMap = {
+    val bagMap: BagMap = mutable.Map()
+    for (line <- input) {
+      val rootColor = line.split("\\s+").slice(0, 2).mkString(" ")
+      val innerColors = line.split("contain")(1).trim.split(",")
+      val innerList: ListBuffer[mutable.Map[String, Int]] = ListBuffer()
+      if (!innerColors(0).startsWith("no")) {
+        for (innerColor <- innerColors) {
+          val innerSplit = innerColor.trim.split("\\s+")
+          val innerNum = Integer.parseInt(innerSplit(0))
+          val innerName = innerSplit.slice(1, 3).mkString(" ")
+          innerList.append(mutable.Map(innerName -> innerNum))
+        }
+      }
+      bagMap.put(rootColor, innerList)
+    }
+    bagMap
+  }
+
+  def getColorCount(color: String, bagMap: BagMap, bagList: ListBuffer[String] = ListBuffer()): Int = {
+    for ((nextColor, bags) <- bagMap) {
+      for (bag <- bags) {
+        if (bag.keySet.contains(color)) {
+          bagList.append(nextColor)
+          getColorCount(nextColor, bagMap, bagList)
+        }
+      }
+    }
+    bagList.toSet.size
+  }
+
+  /**
+    * TODO: Revisit initial attempt at DFS solution.
+    * See https://github.com/VitaminJai/AOC2020/blob/main/Day7/day7.2.py#L12-L19
+    * for Python solution.
+    */
+  def getBagCount(color: String, bagMap: BagMap): Int = {
+    var total = 1
+    if (bagMap(color).isEmpty) {
+      return 1
+    }
+    for (bag <- bagMap(color)) {
+      for ((nextColor, count) <- bag) {
+        total += count * getBagCount(nextColor, bagMap)
+      }
+    }
+    total
+  }
 }

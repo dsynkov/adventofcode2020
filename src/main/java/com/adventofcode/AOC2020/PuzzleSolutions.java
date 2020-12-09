@@ -295,10 +295,68 @@ public class PuzzleSolutions {
     }
 
     private static int day7part1(String[] input) {
-        return -1;
+        Map<String, List<Map<String, Integer>>> bagMap = getBagMap(input);
+        return getColorCount("shiny gold", bagMap, new ArrayList<>());
     }
 
     private static int day7part2(String[] input) {
-        return -1;
+        Map<String, List<Map<String, Integer>>> bagMap = getBagMap(input);
+        return getBagCount("shiny gold", bagMap) - 1;
+    }
+
+    private static Map<String, List<Map<String, Integer>>> getBagMap(String[] input) {
+        Map<String, List<Map<String, Integer>>> bagMap = new HashMap<>();
+        String spaceDelim = " ";
+        for (String line: input) {
+            String rootColor = String.join(spaceDelim, Arrays.copyOfRange(line.split(spaceDelim), 0, 2));
+            String[] innerColors = line.split("contain")[1].trim().split(",");
+            List<Map<String, Integer>> innerList = new ArrayList<>();
+            if (!innerColors[0].startsWith("no")) {
+                for (String innerColor: innerColors) {
+                    String[] innerSplit = innerColor.trim().split(spaceDelim);
+                    Integer innerNum = Integer.parseInt(innerSplit[0]);
+                    String innerName = String.join(spaceDelim, Arrays.copyOfRange(innerSplit, 1, 3));
+                    Map<String, Integer> innerMap = new HashMap<>();
+                    innerMap.put(innerName, innerNum);
+                    innerList.add(innerMap);
+                }
+            }
+            bagMap.put(rootColor, innerList);
+        }
+        return bagMap;
+    }
+
+    private static int getColorCount(String color, Map<String, List<Map<String, Integer>>> bagMap, List<String> bagList) {
+        for (Map.Entry<String, List<Map<String, Integer>>> entry: bagMap.entrySet()) {
+            String nextColor = entry.getKey();
+            List<Map<String, Integer>> bags = entry.getValue();
+            for (Map<String, Integer> bag : bags) {
+                if (bag.keySet().contains(color)) {
+                    bagList.add(nextColor);
+                    getColorCount(nextColor, bagMap, bagList);
+                }
+            }
+        }
+        return new HashSet<>(bagList).size();
+    }
+
+    /**
+     * TODO: Revisit initial attempt at DFS solution.
+     * See https://github.com/VitaminJai/AOC2020/blob/main/Day7/day7.2.py#L12-L19
+     * for Python solution.
+     */
+    private static int getBagCount(String color, Map<String, List<Map<String, Integer>>> bagMap) {
+        int total = 1;
+        if (bagMap.get(color).isEmpty()) {
+            return 1;
+        }
+        for (Map<String, Integer> bag : bagMap.get(color)) {
+            for (Map.Entry<String, Integer> entry: bag.entrySet()) {
+                String nextColor = entry.getKey();
+                Integer count = entry.getValue();
+                total += count * getBagCount(nextColor, bagMap);
+            }
+        }
+        return total;
     }
 }
