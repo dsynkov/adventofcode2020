@@ -43,6 +43,10 @@ public class PuzzleSolutions {
         String[] p7lines = PuzzleHelpers.readLinesFromInputFile(PUZZLE_7_INPUT);
         System.out.printf("Day #7 part #1: %d\n", day7part1(p7lines));
         System.out.printf("Day #7 part #2: %d\n", day7part2(p7lines));
+
+        String[] p8lines = PuzzleHelpers.readLinesFromInputFile(PUZZLE_8_INPUT);
+        System.out.printf("Day #8 part #1: %d\n", day8part1(p8lines));
+        System.out.printf("Day #8 part #2: %d\n", day8part2(p8lines));
     }
 
     private static int day1part1(String[] input) {
@@ -358,5 +362,13 @@ public class PuzzleSolutions {
             }
         }
         return total;
+    }
+
+    private static int day8part1(String[] input) {
+        return -1;
+    }
+
+    private static int day8part2(String[] input) {
+        return -1;
     }
 }
