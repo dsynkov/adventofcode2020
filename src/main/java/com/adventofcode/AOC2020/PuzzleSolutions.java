@@ -2,6 +2,7 @@ package com.adventofcode.AOC2020;
 
 import com.adventofcode.AOC2020.extras.Day4PassportValidator;
 import com.adventofcode.shared.PuzzleHelpers;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.StringUtils;
 
@@ -47,6 +48,10 @@ public class PuzzleSolutions {
         String[] p8lines = PuzzleHelpers.readLinesFromInputFile(PUZZLE_8_INPUT);
         System.out.printf("Day #8 part #1: %d\n", day8part1(p8lines));
         System.out.printf("Day #8 part #2: %d\n", day8part2(p8lines));
+
+        String[] p9lines = PuzzleHelpers.readLinesFromInputFile(PUZZLE_9_INPUT);
+        System.out.printf("Day #9 part #1: %d\n", day9part1(p9lines));
+        System.out.printf("Day #9 part #2: %d\n", day9part2(p9lines));
     }
 
     private static int day1part1(String[] input) {
@@ -365,10 +370,110 @@ public class PuzzleSolutions {
     }
 
     private static int day8part1(String[] input) {
-        return -1;
+
+        int accumulator = 0;
+        Set<Map<Integer, String>> seen = new HashSet<>();
+
+        for (int i = 0; i < input.length;) {
+
+            String instruction = input[i];
+            String[] split = instruction.split("\\s+");
+            String op = split[0];
+            int value = Integer.parseInt(split[1]);
+
+            Map<Integer, String> instructionMap = new HashMap<>();
+            instructionMap.put(i, instruction);
+
+            if (seen.contains(instructionMap)) {
+                break;
+            }
+
+            if (op.equals("acc")) {
+                accumulator += value;
+                i++;
+            } else if (op.equals("jmp")) {
+                i += value;
+            } else { // "nop" assumed
+                i++;
+                continue;
+            }
+            seen.add(instructionMap);
+        }
+        return accumulator;
     }
 
     private static int day8part2(String[] input) {
+        return findBrokenInstruction(input, input, 0);
+    }
+
+    private static int findBrokenInstruction(String[] runningInput, String[] originalInput, int indexOfLastJmpOrNop) {
+
+        int accumulator = 0;
+        Set<Map<Integer, String>> seen = new HashSet<>();
+
+        for (int i = 0; i < runningInput.length;) {
+
+            String instruction = runningInput[i];
+            String[] split = instruction.split("\\s+");
+            String op = split[0];
+            int value = Integer.parseInt(split[1]);
+
+            Map<Integer, String> instructionMap = new HashMap<>();
+            instructionMap.put(i, instruction);
+
+            if (seen.contains(instructionMap)) {
+                System.out.printf("Infinite loop detected with instruction: %s\n", instructionMap);
+                String[] remainingInputArray = Arrays.copyOfRange(runningInput, indexOfLastJmpOrNop, runningInput.length);
+                System.out.printf("Remaining input arrays is %s\n", remainingInputArray.length);
+
+                String lastJmpOrNop = Arrays
+                        .stream(remainingInputArray)
+                        .filter(s -> s.startsWith("nop") || s.startsWith("jmp"))
+                        .findFirst()
+                        .get();
+
+                String replacementInstruction;
+                if (lastJmpOrNop.startsWith("jmp")) {
+                    replacementInstruction = lastJmpOrNop.replace("jmp", "nop");
+                } else {
+                    replacementInstruction = lastJmpOrNop.replace("nop", "jmp");
+                }
+
+                System.out.printf("Last 'jmp' or 'nop' is '%s' to be replaced with '%s'\n", lastJmpOrNop, replacementInstruction);
+
+                int offset = runningInput.length - remainingInputArray.length;
+                indexOfLastJmpOrNop = offset + ArrayUtils.indexOf(remainingInputArray, lastJmpOrNop);
+                System.out.printf("Index of last instruction is %d\n", indexOfLastJmpOrNop);
+
+                String[] newInput = originalInput.clone();
+                newInput[indexOfLastJmpOrNop] = replacementInstruction;
+                return findBrokenInstruction(newInput, originalInput, indexOfLastJmpOrNop + 1);
+            }
+
+            String formatString = "Instruction: %s, Op: %s, Acc: %d Index: %s\n";
+
+            if (op.equals("acc")) {
+                accumulator += value;
+                i++;
+                System.out.printf(formatString, instruction, op, accumulator, i);
+            } else if (op.equals("jmp")) {
+                i += value;
+                System.out.printf(formatString, instruction, op, accumulator, i);
+            } else {
+                i++;
+                System.out.printf(formatString, instruction, op, accumulator, i);
+                continue;
+            }
+            seen.add(instructionMap);
+        }
+        return accumulator;
+    }
+
+    private static int day9part1(String[] input) {
+        return -1;
+    }
+
+    private static int day9part2(String[] input) {
         return -1;
     }
 }
