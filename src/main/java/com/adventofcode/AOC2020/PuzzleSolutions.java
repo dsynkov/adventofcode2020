@@ -6,6 +6,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.StringUtils;
 
+import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -52,6 +53,10 @@ public class PuzzleSolutions {
         String[] p9lines = PuzzleHelpers.readLinesFromInputFile(PUZZLE_9_INPUT);
         System.out.printf("Day #9 part #1: %d\n", day9part1(p9lines));
         System.out.printf("Day #9 part #2: %d\n", day9part2(p9lines));
+
+        String[] p10lines = PuzzleHelpers.readLinesFromInputFile(PUZZLE_10_INPUT);
+        System.out.printf("Day #10 part #1: %d\n", day10part1(p10lines));
+        System.out.printf("Day #10 part #2: %d\n", day10part2(p10lines));
     }
 
     private static int day1part1(String[] input) {
@@ -469,11 +474,63 @@ public class PuzzleSolutions {
         return accumulator;
     }
 
-    private static int day9part1(String[] input) {
+    /**
+     * Revisit solution with two-pointer technique?
+     */
+    private static BigInteger day9part1(String[] input) {
+        List<BigInteger> numbers = Arrays
+                .stream(input)
+                .map(BigInteger::new)
+                .collect(Collectors.toList());
+        int preambleSize = 25;
+        for (int i = 0; i < numbers.size() - preambleSize; i++) {
+            BigInteger target = numbers.get(i + preambleSize);
+            List<BigInteger> subList = numbers.subList(i, preambleSize + i);
+            if (!isTwoSum(subList, target)) {
+                return target;
+            }
+        }
+        return BigInteger.ONE;
+    }
+    private static BigInteger day9part2(String[] input) {
+        List<BigInteger> numbers = Arrays
+                .stream(input)
+                .map(BigInteger::new)
+                .collect(Collectors.toList());
+        BigInteger invalidNum = day9part1(input);
+        for (int i = 0; i < numbers.size(); i++) {
+            // `j` is +2 of `i` since it's the ending range; this
+            // way there will always be 2 numbers to sum in the list
+            for (int j = i + 2; j < numbers.size(); j++) {
+                List<BigInteger> numbersSubset = numbers.subList(i, j);
+                BigInteger sum = numbersSubset.stream().reduce(BigInteger::add).orElse(BigInteger.ZERO);
+//                System.out.printf("I: %d, J: %d, SUM: %-10d SUBSET: %s\n", i, j, sum, numbersSubset);
+                if (sum.equals(invalidNum)) {
+                    numbersSubset.sort(Comparator.comparing(BigInteger::intValue));
+                    return numbersSubset.get(0).add(numbersSubset.get(numbersSubset.size()-1));
+                }
+            }
+        }
+        return BigInteger.ONE;
+    }
+    private static boolean isTwoSum(List<BigInteger> numbers, BigInteger target) {
+        Set<BigInteger> set = new HashSet<>();
+        for (BigInteger number : numbers) {
+            BigInteger complement = target.subtract(number);
+            if (set.contains(complement)) {
+                return true;
+            } else {
+                set.add(number);
+            }
+        }
+        return false;
+    }
+
+    private static int day10part1(String[] input) {
         return -1;
     }
 
-    private static int day9part2(String[] input) {
+    private static int day10part2(String[] input) {
         return -1;
     }
 }
