@@ -533,17 +533,21 @@ public class PuzzleSolutions {
                 .boxed()
                 .sorted(Comparator.comparing(Integer::intValue))
                 .collect(Collectors.toList());
+
         final int maxAdapter = adapters.get(adapters.size()-1);
         final int[] ratings = {1, 2, 3};
+
         int diffsOf1 = 0;
         int diffsOf3 = 0;
         int currentAdapter = 0;
+
         while (currentAdapter < maxAdapter) {
             // See -> https://docs.oracle.com/javase/specs/jls/se10/html/jls-15.html#jls-15.27.2
             int finalAdapter = currentAdapter;
             List<Integer> inRangeAdapters = adapters.stream()
                     .filter(x -> isInRange(ratings, finalAdapter, x))
                     .collect(Collectors.toList());
+
             for (Integer adapter: inRangeAdapters) {
                 int diffOf = adapter - currentAdapter;
                 if (diffOf==1) {
@@ -553,12 +557,14 @@ public class PuzzleSolutions {
                 }
                 currentAdapter = adapter;
             }
+            
             System.out.printf(
                     "CURRENT: %-10s DIFF_1: %-10d DIFF_3: %-10d ELIGIBLE: %-10s \n",
                     currentAdapter, diffsOf1, diffsOf3, inRangeAdapters);
         }
         return diffsOf1 * (diffsOf3 + 1);
     }
+
     private static long day10part2(String[] input) {
         List<Integer> adapters = Arrays
                 .stream(input)
@@ -566,23 +572,28 @@ public class PuzzleSolutions {
                 .boxed()
                 .sorted(Comparator.comparing(Integer::intValue))
                 .collect(Collectors.toList());
+
         adapters.add(adapters.get(adapters.size() -1) + 3);
         adapters.add(0, 0);
         Map<Integer, Long> cacheMap = new HashMap<>();
+
         return findAdapterArrangements(0, adapters, cacheMap);
     }
     private static boolean isInRange(int[] ratings, int currentAdapter, int nextAdapter) {
         return Arrays.stream(ratings).anyMatch(x -> currentAdapter + x == nextAdapter);
     }
+
     /**
      * From walk-through -> https://www.youtube.com/watch?v=cE88K2kFZn0
      * where `i` is the starting (or current) position
      * and `j` is the next one to step to.
      */
     private static long findAdapterArrangements(int i, List<Integer> adapters, Map<Integer, Long> cacheMap) {
+
         long numAdapters = 0;
         if (i == adapters.size() - 1)
             return 1;
+
         for (int j = i+1; j < adapters.size(); j++) {
             int currentAdapter = adapters.get(i);
             int nextAdapter = adapters.get(j);
