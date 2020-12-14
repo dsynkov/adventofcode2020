@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 
 import static com.adventofcode.AOC2020.PuzzleConstants.*;
 
-public class PuzzleSolutions {
+public class PuzzleSolutionsDay1Thru10 {
 
     public static void main(String[] args) {
         String[] p1lines = PuzzleHelpers.readLinesFromInputFile(PUZZLE_1_INPUT);
@@ -557,7 +557,7 @@ public class PuzzleSolutions {
                 }
                 currentAdapter = adapter;
             }
-            
+
             System.out.printf(
                     "CURRENT: %-10s DIFF_1: %-10d DIFF_3: %-10d ELIGIBLE: %-10s \n",
                     currentAdapter, diffsOf1, diffsOf3, inRangeAdapters);
